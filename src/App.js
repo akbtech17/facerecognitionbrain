@@ -7,6 +7,8 @@ import Rank from './components/Rank/Rank';
 import Particles from 'react-particles-js';
 import Clarifai from "clarifai";
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import Signin from './components/Signin/Signin';
+
 
 const app = new Clarifai.App({
   apiKey: '675852916f70476fa1a2349789bfcad6'
@@ -75,6 +77,7 @@ class App extends Component {
       <div className="App">
         <Particles className="particles" params= {particlesOptions}/>
         <Navigation />
+        <Signin />
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange = {this.onInputChange} onSubmit = {this.onSubmit}/>
