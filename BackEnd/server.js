@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 
-const databse = {
+const database = {
     users : [
         {
             id:'123',
@@ -25,22 +25,37 @@ const databse = {
 }
 app.use(express.json());
 app.get('/', (req, res) => {
-    res.send("this is working");
+    // res.send("this is working");
+    res.json(database.users);
 })
 
 
 app.post('/signin', (req,res) => {
-    const suser = req.body;
-    // console.log(suser)
-    const users = databse.users;
+    const new_user = req.body;
+    // console.log(new_user)
+    const users = database.users;
     
     for(var i=0; i<users.length; i++) {
-        if(users[i].email == suser.email && users[i].password == suser.password) {
+        if(users[i].email == new_user.email && users[i].password == new_user.password) {
             res.json('sign-in successful!')
         }
     }
     res.json('registration of user is required!')
 
+})
+
+app.post('/register', (req,res) => {
+    const {email, name, password} = req.body;
+    // console.log(new_user);
+    database.users.push({
+        id:'12345',
+        name: name,
+        email: email,
+        password: password,
+        entries: 0,
+        joined : new Date()
+    })
+    res.json(database.users[database.users.length-1]);
 })
 
 app.listen(3000, ()=> {
