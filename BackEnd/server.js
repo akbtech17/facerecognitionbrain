@@ -82,12 +82,13 @@ app.get('/profile/:id', (req, res) => {
 
 app.put('/image', (req, res) => {
     const { id } = req.body;
-    console.log(id);
+    console.log("image ",id);
     let isFound = false;
     database.users.forEach(user => {
         if(user.id === id) {
             isFound = true;
             user.entries++
+            console.log(user.entries)
             return res.json(user.entries);
         } 
     })
