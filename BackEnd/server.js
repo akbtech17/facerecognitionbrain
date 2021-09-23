@@ -45,7 +45,7 @@ app.post('/signin', (req,res) => {
     database.users.forEach(user => {
         if(user.email === new_user.email && user.password === new_user.password) {
             isFound = true;
-            return res.json('success')
+            return res.json(user)
         }
     }) 
     if(!isFound)
