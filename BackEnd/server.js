@@ -1,5 +1,6 @@
 const express = require('express');
-
+const bcrypt = require('bcrypt-nodejs');
+const { response } = require('express');
 const app = express();
 
 const database = {
@@ -45,6 +46,9 @@ app.post('/signin', (req,res) => {
 
 app.post('/register', (req,res) => {
     const {email, name, password} = req.body;
+    // bcrypt.hash(password, null, null, (err, hash) => {
+    //     console.log(hash);
+    // })
     database.users.push({
         id:'12345',
         name: name,
@@ -82,6 +86,8 @@ app.put('/image', (req, res) => {
     if(isFound == false) 
         res.status(404).json('no such user');
 })
+
+
 
 app.listen(3000, ()=> {
     console.log("FaceRecog is Running on Port3000");
