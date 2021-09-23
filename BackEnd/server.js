@@ -1,8 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
-// const { response } = require('express');
 const cors = require('cors')
-
 
 const app = express();
 
@@ -11,8 +9,8 @@ const database = {
         {
             id:'123',
             name:'Anshul Bansal',
-            email: 'akb.tech17@gmail.com',
-            password: 'asumasum',
+            email: 'a',
+            password: 'a',
             entries: 0,
             joined : new Date()
         },
@@ -42,16 +40,16 @@ app.get('/', (req, res) => {
 
 app.post('/signin', (req,res) => {
     const new_user = req.body;
-    console.log(new_user);
+    console.log('Getting sign in requrest from client-side', new_user);
     let isFound = false;
     database.users.forEach(user => {
         if(user.email === new_user.email && user.password === new_user.password) {
             isFound = true;
-            return res.json('sign-in successful')
+            return res.json('success')
         }
     }) 
     if(!isFound)
-        res.json('registration of user is required!')
+        res.status(400).json('error logging in!')
 })
 
 app.post('/register', (req,res) => {
