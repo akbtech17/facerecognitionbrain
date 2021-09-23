@@ -32,21 +32,19 @@ app.get('/', (req, res) => {
 
 app.post('/signin', (req,res) => {
     const new_user = req.body;
-    // console.log(new_user)
-    const users = database.users;
-    
-    for(var i=0; i<users.length; i++) {
-        if(users[i].email == new_user.email && users[i].password == new_user.password) {
-            res.json('sign-in successful!')
+    let isFound = false;
+    database.users.forEach(user => {
+        if(user.email === new_user.email && user.password === new_user.password) {
+            isFound = true;
+            return res.json('sign-in successful')
         }
-    }
-    res.json('registration of user is required!')
-
+    }) 
+    if(!isFound)
+        res.json('registration of user is required!')
 })
 
 app.post('/register', (req,res) => {
     const {email, name, password} = req.body;
-    // console.log(new_user);
     database.users.push({
         id:'12345',
         name: name,
@@ -56,6 +54,18 @@ app.post('/register', (req,res) => {
         joined : new Date()
     })
     res.json(database.users[database.users.length-1]);
+})
+
+app.get('/profile/:id', (req, res) => {
+    const { id } = req.params;
+    let isFound = false;
+    database.users.forEach(user => {
+        if(user.id === id) {
+            isFound = true;
+            return res.json(user);
+        } 
+    })
+    if(isFound == false) res.status(404).json('no such user');
 })
 
 app.listen(3000, ()=> {
