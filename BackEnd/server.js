@@ -68,6 +68,21 @@ app.get('/profile/:id', (req, res) => {
     if(isFound == false) res.status(404).json('no such user');
 })
 
+app.put('/image', (req, res) => {
+    const { id } = req.body;
+    console.log(id);
+    let isFound = false;
+    database.users.forEach(user => {
+        if(user.id === id) {
+            isFound = true;
+            user.entries++
+            return res.json(user.entries);
+        } 
+    })
+    if(isFound == false) 
+        res.status(404).json('no such user');
+})
+
 app.listen(3000, ()=> {
     console.log("FaceRecog is Running on Port3000");
 })
