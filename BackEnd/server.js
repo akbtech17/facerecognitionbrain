@@ -1,6 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
-const { response } = require('express');
+// const { response } = require('express');
+const cors = require('cors')
+
+
 const app = express();
 
 const database = {
@@ -24,15 +27,22 @@ const database = {
         
     ]
 }
+
+// midleware
 app.use(express.json());
+app.use(cors());
+
+
 app.get('/', (req, res) => {
     // res.send("this is working");
+    console.log('this.is working')
     res.json(database.users);
 })
 
 
 app.post('/signin', (req,res) => {
     const new_user = req.body;
+    console.log(new_user);
     let isFound = false;
     database.users.forEach(user => {
         if(user.email === new_user.email && user.password === new_user.password) {
