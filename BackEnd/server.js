@@ -94,17 +94,13 @@ app.get("/profile/:id", (req, res) => {
 
 app.put("/image", (req, res) => {
   const { id } = req.body;
-  console.log("image ", id);
-  let isFound = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      isFound = true;
-      user.entries++;
-      console.log(user.entries);
-      return res.json(user.entries);
-    }
-  });
-  if (isFound == false) res.status(404).json("no such user");
+  postgres
+    .from("users")
+    .where("id", "=", id)
+    .increment("entries", 1)
+    .returning("entries")
+    .then((resp) => res.json(resp[0]))
+    .catch((err) => res.status(400).json("unable to get entries"));
 });
 
 app.listen(3000, () => {
