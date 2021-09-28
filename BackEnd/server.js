@@ -14,14 +14,6 @@ const postgres = knex({
   },
 });
 
-// postgres
-//   .select("*")
-//   .from("users")
-//   .then((data) => {
-//     console.log(data);
-//   })
-//   .catch((err) => console.log(err));
-
 const app = express();
 
 const database = {
@@ -84,19 +76,20 @@ app.post("/register", (req, res) => {
     .then((user) => {
       res.json(user[0]);
     })
-    .catch(err => res.status(400).json("unable to register"));
+    .catch((err) => res.status(400).json("unable to register"));
 });
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  let isFound = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      isFound = true;
-      return res.json(user);
-    }
-  });
-  if (isFound == false) res.status(404).json("no such user");
+  postgres
+    .select("*")
+    .from("users")
+    .where("id", id)
+    .then((user) => {
+      if (user.length) res.json(user[0]);
+      else res.status(404).json(`user with id : ${id} is not registered!`);
+    })
+    .catch((err) => res.status(400).json("error getting user"));
 });
 
 app.put("/image", (req, res) => {
