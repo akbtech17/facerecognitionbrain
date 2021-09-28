@@ -48,16 +48,25 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  const new_user = req.body;
-  console.log("Getting sign in requrest from client-side", new_user);
-  let isFound = false;
-  database.users.forEach((user) => {
-    if (user.email === new_user.email && user.password === new_user.password) {
-      isFound = true;
-      return res.json(user);
-    }
-  });
-  if (!isFound) res.status(400).json("error logging in!");
+  postgres
+    .select("email", "hash")
+    .where("email", "=", req.body.email)
+    .from("login")
+    .then((data) => {
+      const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+      if (isValid) {
+        return postgres
+          .select("*")
+          .from("users")
+          .where("email", "=", req.body.email)
+          .then((user) => {
+            res.json(user[0]);
+          })
+          .catch((err) => res.status(400).json("unable to get user"));
+      }
+      else res.status(400).json("wrong credentials");
+    })
+    .catch((err) => res.status(400).json("wrong credentials"));
 });
 
 app.post("/register", (req, res) => {
