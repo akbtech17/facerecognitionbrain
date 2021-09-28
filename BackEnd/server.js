@@ -14,13 +14,13 @@ const postgres = knex({
   },
 });
 
-postgres
-  .select("*")
-  .from("users")
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((err) => console.log(err));
+// postgres
+//   .select("*")
+//   .from("users")
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((err) => console.log(err));
 
 const app = express();
 
@@ -75,14 +75,16 @@ app.post("/register", (req, res) => {
   // })
   console.log("email is", email);
   postgres("users")
+    .returning("*")
     .insert({
       name: name,
       email: email,
       joined: new Date(),
     })
-    .then(console.log);
-
-  res.json("user got registered!");
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch(err => res.status(400).json("unable to register"));
 });
 
 app.get("/profile/:id", (req, res) => {
