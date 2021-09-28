@@ -62,20 +62,33 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
-  // bcrypt.hash(password, null, null, (err, hash) => {
-  //     console.log(hash);
-  // })
+  const hash = bcrypt.hashSync(password);
   console.log("email is", email);
-  postgres("users")
-    .returning("*")
-    .insert({
-      name: name,
-      email: email,
-      joined: new Date(),
+  postgres
+    .transaction((trx) => {
+      trx
+        .insert({
+          hash: hash,
+          email: email,
+        })
+        .into("login")
+        .returning("email")
+        .then((loginemail) => {
+          return trx("users")
+            .returning("*")
+            .insert({
+              name: name,
+              email: loginemail[0],
+              joined: new Date(),
+            })
+            .then((user) => {
+              res.json(user[0]);
+            });
+        })
+        .then(trx.commit)
+        .catch(trx.rollback);
     })
-    .then((user) => {
-      res.json(user[0]);
-    })
+
     .catch((err) => res.status(400).json("unable to register"));
 });
 
