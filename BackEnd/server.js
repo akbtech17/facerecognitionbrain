@@ -16,35 +16,13 @@ const postgres = knex({
 
 const app = express();
 
-const database = {
-  users: [
-    {
-      id: "123",
-      name: "Anshul Bansal",
-      email: "a",
-      password: "a",
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: "1234",
-      name: "Aatmic Tiwari",
-      email: "aatmic@gmail.com@",
-      password: "taatmic",
-      entries: 0,
-      joined: new Date(),
-    },
-  ],
-};
 
 // midleware
 app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  // res.send("this is working");
   console.log("this.is working");
-  res.json(database.users);
 });
 
 app.post("/signin", (req, res) => {
@@ -63,8 +41,7 @@ app.post("/signin", (req, res) => {
             res.json(user[0]);
           })
           .catch((err) => res.status(400).json("unable to get user"));
-      }
-      else res.status(400).json("wrong credentials");
+      } else res.status(400).json("wrong credentials");
     })
     .catch((err) => res.status(400).json("wrong credentials"));
 });
