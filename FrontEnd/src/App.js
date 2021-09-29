@@ -74,7 +74,6 @@ class App extends Component {
     const height = Number(image.height);
     const width = Number(image.width);
 
-    // console.log(height,width);
 
     return {
       leftCol: clarifaiFace.left_col * width,
@@ -85,7 +84,7 @@ class App extends Component {
   };
 
   drawFaceBox = (box) => {
-    console.log(box);
+    // console.log(box);
     this.setState({ box: box });
   };
 
@@ -95,14 +94,12 @@ class App extends Component {
   };
 
   onSubmit = () => {
-    // console.log("click!");
     this.setState({ imageUrl: this.state.input });
     // "a403429f2ddf4b49b307e318f00e528b"
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
       .then((response) => {
         if (response) {
-          console.log("id:", this.state.user.id);
           fetch("http://localhost:3000/image", {
             method: "put",
             headers: { "Content-Type": "application/json" },
