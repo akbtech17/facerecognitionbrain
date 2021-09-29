@@ -84,12 +84,10 @@ class App extends Component {
   };
 
   drawFaceBox = (box) => {
-    // console.log(box);
     this.setState({ box: box });
   };
 
   onInputChange = (event) => {
-    // console.log(event.target.value);
     this.setState({ input: event.target.value });
   };
 
