@@ -57,7 +57,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3000")
+    fetch("https://calm-eyrie-06200.herokuapp.com/")
       .then((response) => response.json())
       .then((data) => console.log(data));
   }
@@ -92,7 +92,7 @@ class App extends Component {
   //     .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
   //     .then((response) => {
   //       if (response) {
-  //         fetch("http://localhost:3000/image", {
+  //         fetch("https://calm-eyrie-06200.herokuapp.com/image", {
   //           method: "put",
   //           headers: { "Content-Type": "application/json" },
   //           body: JSON.stringify({
@@ -113,7 +113,7 @@ class App extends Component {
   onSubmit = () => {
     this.setState({ imageUrl: this.state.input });
     // "a403429f2ddf4b49b307e318f00e528b"
-    fetch("http://localhost:3000/imageurl", {
+    fetch("https://calm-eyrie-06200.herokuapp.com/imageurl", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -123,7 +123,7 @@ class App extends Component {
       .then((response) => response.json())
       .then((response) => {
         if (response) {
-          fetch("http://localhost:3000/image", {
+          fetch("https://calm-eyrie-06200.herokuapp.com/image", {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
