@@ -8,14 +8,12 @@ const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
 const postgres = knex({
   client: "pg",
   connection: {
-    host: "127.0.0.1",
-    port: 5432,
-    user: "postgres",
-    password: "sql",
-    database: "smart-brain-db",
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
   },
 });
 
@@ -26,7 +24,8 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  console.log("this.is working");
+  // console.log("this.is working");
+  res.send("this is working");
 });
 
 app.post("/signin", (req, res) =>
@@ -44,8 +43,8 @@ app.get("/profile/:id", (req, res) =>
 app.put("/image", (req, res) => image.handleImageRequest(req, res, postgres));
 app.post("/imageurl", (req, res) => image.handleApiCall(req, res));
 
-app.listen(3000, () => {
-  console.log("FaceRecog is Running on Port3000");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`FaceRecog is Running on Port ${process.env.PORT}`);
 });
 
 /* EndPoints
