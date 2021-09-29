@@ -5,14 +5,9 @@ import Logo from "./components/Logo/Logo";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import Rank from "./components/Rank/Rank";
 import Particles from "react-particles-js";
-import Clarifai from "clarifai";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
-
-const app = new Clarifai.App({
-  apiKey: "675852916f70476fa1a2349789bfcad6",
-});
 
 const particlesOptions = {
   particles: {
@@ -74,7 +69,6 @@ class App extends Component {
     const height = Number(image.height);
     const width = Number(image.width);
 
-
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
@@ -91,11 +85,42 @@ class App extends Component {
     this.setState({ input: event.target.value });
   };
 
+  // onSubmit = () => {
+  //   this.setState({ imageUrl: this.state.input });
+  //   // "a403429f2ddf4b49b307e318f00e528b"
+  //   app.models
+  //     .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+  //     .then((response) => {
+  //       if (response) {
+  //         fetch("http://localhost:3000/image", {
+  //           method: "put",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({
+  //             id: this.state.user.id,
+  //           }),
+  //         })
+  //           .then((response) => response.json())
+  //           .then((count) => {
+  //             this.setState(Object.assign(this.state.user, { entries: count }));
+  //           })
+  //           .catch(console.log);
+  //       }
+  //       this.drawFaceBox(this.calculateFaceLocation(response));
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
   onSubmit = () => {
     this.setState({ imageUrl: this.state.input });
     // "a403429f2ddf4b49b307e318f00e528b"
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+    fetch("http://localhost:3000/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: this.state.input,
+      }),
+    })
+      .then((response) => response.json())
       .then((response) => {
         if (response) {
           fetch("http://localhost:3000/image", {
